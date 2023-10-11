@@ -7,6 +7,7 @@ class Fighter:
 
         self.name = name
         self.max_hp = max_hp
+        self.hp = max_hp
         self.strength = strength
         self.start_potions = potions
         self.potions = potions
