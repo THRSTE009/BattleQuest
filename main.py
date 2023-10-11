@@ -47,9 +47,11 @@ while run:
     draw_screen(panel_img, 0, SCREEN_HEIGHT - BOTTOM_PANEL)  # draw panel
 
     # Draw Fighters
+    knight.update()
     knight.draw()
 
     for bandit in bandit_list:
+        bandit.update()
         bandit.draw()
 
     for event in pygame.event.get():
