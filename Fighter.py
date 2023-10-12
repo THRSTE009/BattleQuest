@@ -24,46 +24,25 @@ class Fighter:
         self.font = font
         self.damage_text_group = damage_text_group
 
-        # Load idle images
-        temp_idle_list = []
-        for i in range(8):
-            loaded_img = pygame.image.load(f"assets/{self.name}/Idle/{i}.png")
-            scaled_img = pygame.transform.scale(loaded_img,
-                                                (loaded_img.get_width() * 3, loaded_img.get_height() * 3))
-            temp_idle_list.append(scaled_img)
-
-        self.animation_list.append(temp_idle_list)
-
-        # Load Attack images
-        temp_attack_list = []
-        for i in range(8):
-            loaded_img = pygame.image.load(f"assets/{self.name}/Attack/{i}.png")
-            scaled_img = pygame.transform.scale(loaded_img,
-                                                (loaded_img.get_width() * 3, loaded_img.get_height() * 3))
-            temp_attack_list.append(scaled_img)
-        self.animation_list.append(temp_attack_list)
-
-        # Load Hurt images
-        temp_hurt_list = []
-        for i in range(3):
-            loaded_img = pygame.image.load(f"assets/{self.name}/Hurt/{i}.png")
-            scaled_img = pygame.transform.scale(loaded_img,
-                                                (loaded_img.get_width() * 3, loaded_img.get_height() * 3))
-            temp_hurt_list.append(scaled_img)
-        self.animation_list.append(temp_hurt_list)
-
-        # Load Death images
-        temp_death_list = []
-        for i in range(10):
-            loaded_img = pygame.image.load(f"assets/{self.name}/Death/{i}.png")
-            scaled_img = pygame.transform.scale(loaded_img,
-                                                (loaded_img.get_width() * 3, loaded_img.get_height() * 3))
-            temp_death_list.append(scaled_img)
-        self.animation_list.append(temp_death_list)
+        self.load_animations("Idle", 8)  # Load idle images
+        self.load_animations("Attack", 8)  # Load Attack images
+        self.load_animations("Hurt", 3)   # Load Hurt images
+        self.load_animations("Death", 10)   # Load Death images
 
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+
+        # Load idle images
+    def load_animations(self, action, number_of_images):
+        temp_list = []
+        for i in range(number_of_images):
+            loaded_img = pygame.image.load(f"assets/{self.name}/{action}/{i}.png")
+            scaled_img = pygame.transform.scale(loaded_img,
+                                                (loaded_img.get_width() * 3, loaded_img.get_height() * 3))
+            temp_list.append(scaled_img)
+
+        self.animation_list.append(temp_list)
 
     def update(self):
         animation_cooldown = 100
@@ -118,6 +97,14 @@ class Fighter:
         # set  variables to death animation
         self.action = 3
         self.frame_index = 0
+        self.update_time = pygame.time.get_ticks()
+
+    def reset(self):
+        self.alive = True
+        self.potions = self.start_potions
+        self.hp = self.max_hp
+        self.frame_index = 0
+        self.action = 0
         self.update_time = pygame.time.get_ticks()
 
     def draw(self):
