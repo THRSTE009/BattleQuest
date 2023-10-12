@@ -1,4 +1,5 @@
 import pygame
+import random
 
 
 class Fighter:
@@ -53,8 +54,30 @@ class Fighter:
         if current_time - self.update_time > animation_cooldown:
             self.update_time = current_time
             self.frame_index += 1
-            if self.frame_index >= len(self.animation_list[self.action]):
-                self.frame_index = 0
+        if self.frame_index >= len(self.animation_list[self.action]):
+            self.idle()
+
+    def idle(self):
+        # set  variables to attack animation
+        self.action = 0
+        self.frame_index = 0
+        self.update_time = pygame.time.get_ticks()
+
+    def attack(self, target):
+        # Deal damage to an enemy.
+        rand = random.randint(-5, 5)
+        damage = self.strength + rand
+        target.hp -= damage
+
+        # Check if target died.
+        if target.hp < 1:
+            target.hp = 0
+            target.alive = False
+
+        # set  variables to attack animation
+        self.action = 1
+        self.frame_index = 0
+        self.update_time = pygame.time.get_ticks()
 
     def draw(self):
         self.screen.blit(self.image, self.rect)
