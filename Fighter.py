@@ -34,18 +34,34 @@ class Fighter:
 
         self.animation_list.append(temp_idle_list)
 
-        # Load attack images
+        # Load Attack images
         temp_attack_list = []
         for i in range(8):
             loaded_img = pygame.image.load(f"assets/{self.name}/Attack/{i}.png")
             scaled_img = pygame.transform.scale(loaded_img,
                                                 (loaded_img.get_width() * 3, loaded_img.get_height() * 3))
             temp_attack_list.append(scaled_img)
-
         self.animation_list.append(temp_attack_list)
 
-        self.image = self.animation_list[self.action][self.frame_index]
+        # Load Hurt images
+        temp_hurt_list = []
+        for i in range(3):
+            loaded_img = pygame.image.load(f"assets/{self.name}/Hurt/{i}.png")
+            scaled_img = pygame.transform.scale(loaded_img,
+                                                (loaded_img.get_width() * 3, loaded_img.get_height() * 3))
+            temp_hurt_list.append(scaled_img)
+        self.animation_list.append(temp_hurt_list)
 
+        # Load Death images
+        temp_death_list = []
+        for i in range(10):
+            loaded_img = pygame.image.load(f"assets/{self.name}/Death/{i}.png")
+            scaled_img = pygame.transform.scale(loaded_img,
+                                                (loaded_img.get_width() * 3, loaded_img.get_height() * 3))
+            temp_death_list.append(scaled_img)
+        self.animation_list.append(temp_death_list)
+
+        self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
@@ -60,10 +76,13 @@ class Fighter:
             self.update_time = current_time
             self.frame_index += 1
         if self.frame_index >= len(self.animation_list[self.action]):
-            self.idle()
+            if self.action == 3:
+                self.frame_index = len(self.animation_list[self.action]) - 1
+            else:
+                self.idle()
 
     def idle(self):
-        # set  variables to attack animation
+        # set  variables to idle animation
         self.action = 0
         self.frame_index = 0
         self.update_time = pygame.time.get_ticks()
@@ -73,6 +92,8 @@ class Fighter:
         rand = random.randint(-5, 5)
         damage = self.strength + rand
         target.hp -= damage
+        target.hurt()
+
         damage_text = DamageText(target.rect.centerx, target.rect.y, str(damage), self.red, self.font)
         self.damage_text_group.add(damage_text)
 
@@ -80,9 +101,22 @@ class Fighter:
         if target.hp < 1:
             target.hp = 0
             target.alive = False
+            target.death()
 
         # set  variables to attack animation
         self.action = 1
+        self.frame_index = 0
+        self.update_time = pygame.time.get_ticks()
+
+    def hurt(self):
+        # set  variables to hurt animation
+        self.action = 2
+        self.frame_index = 0
+        self.update_time = pygame.time.get_ticks()
+
+    def death(self):
+        # set  variables to death animation
+        self.action = 3
         self.frame_index = 0
         self.update_time = pygame.time.get_ticks()
 

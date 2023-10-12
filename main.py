@@ -51,7 +51,7 @@ damage_text_group = pygame.sprite.Group()
 
 # Create Fighters
 knight = Fighter(screen,200, 260, 'Knight', 30, 10, 3, red, font, damage_text_group)
-bandit1 = Fighter(screen,550, 270, 'Bandit', 20, 6, 1, red, font, damage_text_group)
+bandit1 = Fighter(screen,550, 270, 'Bandit', 2, 6, 1, red, font, damage_text_group)
 bandit2 = Fighter(screen,700, 270, 'Bandit', 20, 6, 1, red, font, damage_text_group)
 
 bandit_list = [bandit1, bandit2]
@@ -134,7 +134,7 @@ while run:
         if bandit.rect.collidepoint(mouse_pos):
             pygame.mouse.set_visible(False)     # Hide mouse
             screen.blit(sword_img, mouse_pos)   # Show Sword
-            if hasClicked:
+            if hasClicked and bandit.alive:
                 canAttack = True
                 target = bandit_list[count]
 
