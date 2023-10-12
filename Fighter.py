@@ -1,9 +1,10 @@
 import pygame
 import random
+from DamageText import DamageText
 
 
 class Fighter:
-    def __init__(self, screen, x, y, name, max_hp, strength, potions):
+    def __init__(self, screen, x, y, name, max_hp, strength, potions, red, font, damage_text_group):
         self.screen = screen
 
         self.name = name
@@ -18,6 +19,10 @@ class Fighter:
         self.frame_index = 0
         self.action = 0     # 0 = idle, 1 = attack, 2 = hurt, 3 = death.
         self.update_time = pygame.time.get_ticks()
+
+        self.red = red
+        self.font = font
+        self.damage_text_group = damage_text_group
 
         # Load idle images
         temp_idle_list = []
@@ -68,6 +73,8 @@ class Fighter:
         rand = random.randint(-5, 5)
         damage = self.strength + rand
         target.hp -= damage
+        damage_text = DamageText(target.rect.centerx, target.rect.y, str(damage), self.red, self.font)
+        self.damage_text_group.add(damage_text)
 
         # Check if target died.
         if target.hp < 1:
